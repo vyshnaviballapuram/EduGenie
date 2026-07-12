@@ -1,13 +1,22 @@
 # EduGenie — Google Gemini Powered Learning Assistant
 
+**🔗 Live Demo:** [https://edugenie-3.onrender.com](https://edugenie-3.onrender.com)
+*(Free-tier hosting — first request after inactivity may take 30–50s to wake up)*
+
 Project built for the **SmartBridge Google Cloud Gen AI Internship**.
 
-EduGenie is an AI-powered learning assistant that helps students with:
-- **Question Answering** (Gemini 1.5 Pro)
-- **Concept Explanation** (LaMini-Flan-T5-783M, local lightweight model)
-- **Quiz Generation** (Gemini 1.5 Pro, MCQs in JSON)
-- **Text Summarization** (Gemini 1.5 Pro)
-- **Personalized Learning Path Recommendations** (Gemini 1.5 Pro)
+## About
+
+EduGenie is an AI-powered learning assistant that helps students learn faster and smarter using generative AI. It combines Google's **Gemini** models for advanced reasoning tasks with a lightweight local **LaMini-Flan-T5** model for quick, simplified concept explanations — giving students a single interface for the most common study tasks:
+
+- 🧠 **Ask any question** and get a clear, accurate answer
+- 📖 **Get simplified explanations** of complex topics, written for beginners
+- 📝 **Generate custom quizzes** from any passage or topic, with instant answer checking
+- ✂️ **Summarize long content** into concise, easy-to-digest text
+- 🗺️ **Get a personalized learning path** — structured from beginner to advanced, with curated resources
+
+Built with a modular FastAPI backend, a lightweight vanilla JS/HTML frontend, and deployed live on Render.
+
 
 ## Folder Structure
 
@@ -69,10 +78,13 @@ edugenie/
 ## Tech Stack
 
 - **Backend:** FastAPI, Uvicorn
-- **AI Models:** Google Gemini 1.5 Pro (cloud), LaMini-Flan-T5-783M (local, via Hugging Face Transformers)
+- **AI Models:** Google Gemini (`gemini-flash-latest`, cloud), LaMini-Flan-T5-783M (local, via Hugging Face Transformers)
 - **Frontend:** HTML, CSS, Jinja2, vanilla JS (fetch API)
+- **Deployment:** Render (Web Service, free tier)
 
 ## Notes
 
-- `explanation_module.py` downloads `MBZUAI/LaMini-Flan-T5-783M` from Hugging Face on first run — this may take a few minutes.
+- `explanation_module.py` downloads `MBZUAI/LaMini-Flan-T5-783M` from Hugging Face on first run — this may take a few minutes locally, and may not run on memory-constrained free hosting tiers (the app degrades gracefully and other features remain unaffected).
+- Gemini model names are periodically deprecated by Google; `gemini-flash-latest` is used as an alias that auto-updates to the current stable flash model to reduce maintenance.
+- Free-tier Gemini API usage is subject to daily rate limits (20 requests/day at time of writing for some models).
 - Do **not** commit your `.env` file or API key to the repository.
