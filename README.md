@@ -17,6 +17,17 @@ EduGenie is an AI-powered learning assistant that helps students learn faster an
 
 Built with a modular FastAPI backend, a lightweight vanilla JS/HTML frontend, and deployed live on Render.
 
+## Screenshots
+
+### Home Page
+![Homepage](docs/screenshots/homepage.jpeg)
+
+## ER Diagram
+![ER Diagram](docs/er-diagram/EduGenie_ER_Diagram.jpeg)
+
+## Demo Video
+📹 [Watch the demo video](docs/demo-video.mp4)
+
 
 ## Folder Structure
 
