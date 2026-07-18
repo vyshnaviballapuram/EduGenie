@@ -1,3 +1,7 @@
+import os
+os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "10")
+os.environ.setdefault("HF_HUB_ETAG_TIMEOUT", "5")
+
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 
@@ -21,7 +25,7 @@ def _load_model():
 def explain_topic(topic: str) -> str:
     _load_model()
     if _load_error:
-        return f"⚠ Explanation model could not be loaded (network/download issue): {_load_error}"
+        return f"Explanation model could not be loaded (network/download issue): {_load_error}"
 
     input_text = f"Explain the concept of '{topic}' in a simple and clear way for a school student."
     inputs = explain_tokenizer(input_text, return_tensors="pt")

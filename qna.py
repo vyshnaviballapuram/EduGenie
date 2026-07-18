@@ -12,4 +12,4 @@ def answer_question_with_gemini(question: str) -> str:
         response = model.generate_content(question)
         return response.text.strip()
     except Exception as e:
-        return f"⚠ Error in QnA: {e}"
+        return f"Error in QnA: {e}"

@@ -13,4 +13,4 @@ def summarize_text(text: str) -> str:
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
-        return f"⚠ Error in Summary: {e}"
+        return f"Error in Summary: {e}"

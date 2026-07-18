@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Query
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.concurrency import run_in_threadpool
 
 from qna import answer_question_with_gemini
 from explanation_module import explain_topic
@@ -19,7 +20,7 @@ templates = Jinja2Templates(directory="templates")
 # Home page
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse(request, "index.html", {"some_var": "value"})
+    return templates.TemplateResponse(request, "index.html", {})
 
 
 # Q&A - GET API using Gemini
@@ -36,7 +37,7 @@ async def explain_api(request: Request):
     topic = data.get("topic")
     if not topic:
         return JSONResponse(content={"error": "Please provide a topic."}, status_code=400)
-    explanation = explain_topic(topic)
+    explanation = await run_in_threadpool(explain_topic, topic)
     return {"topic": topic, "explanation": explanation}
 
 
@@ -59,7 +60,7 @@ async def quiz_api(request: Request):
     if not text:
         return JSONResponse(content={"error": "Please provide text for quiz."}, status_code=400)
     quiz = generate_quiz(text)
-    print("Generated quiz:", quiz)  # ✅ DEBUG
+    print("Generated quiz:", quiz)  # DEBUG
     return JSONResponse(content={"quiz": quiz})
 
 
