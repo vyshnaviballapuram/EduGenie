@@ -1,218 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGenie — AI Learning Assistant</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+# EduGenie — Google Gemini Powered Learning Assistant
 
-    <header class="masthead">
-        <div class="masthead-inner">
-            <p class="eyebrow">Study desk</p>
-            <h1>EduGenie</h1>
-            <p class="tagline">Your AI tutor for questions, explanations, quizzes, summaries, and study plans.</p>
-        </div>
-    </header>
+**🔗 Live Demo:** [https://edugenie-3.onrender.com](https://edugenie-3.onrender.com)
+*(Free-tier hosting — first request after inactivity may take 30–50s to wake up)*
 
-    <main class="desk">
+Project built for the **SmartBridge Google Cloud Gen AI Internship**.
 
-        <section class="notebook" id="qa">
-            <div class="tab tab-blue">Ask</div>
-            <div class="page">
-                <h2>Ask a question</h2>
-                <p class="hint">General knowledge, homework help, or anything you're stuck on.</p>
-                <form id="qaForm" class="row">
-                    <input type="text" id="question" placeholder="Why is the sky blue?" required>
-                    <button type="submit">Get answer</button>
-                </form>
-                <div id="qaResult" class="output" data-empty="Your answer will appear here.">Your answer will appear here.</div>
-            </div>
-        </section>
+## About
 
-        <section class="notebook" id="explain">
-            <div class="tab tab-amber">Explain</div>
-            <div class="page">
-                <h2>Simplify a concept</h2>
-                <p class="hint">A short, plain-language explanation of any topic.</p>
-                <form id="explainForm" class="row">
-                    <input type="text" id="topic" placeholder="Photosynthesis" required>
-                    <button type="submit">Explain</button>
-                </form>
-                <div id="explanationResult" class="output" data-empty="Your explanation will appear here.">Your explanation will appear here.</div>
-            </div>
-        </section>
+EduGenie is an AI-powered learning assistant that helps students learn faster and smarter using generative AI. It combines Google's **Gemini** models for advanced reasoning tasks with a lightweight local **LaMini-Flan-T5** model for quick, simplified concept explanations — giving students a single interface for the most common study tasks:
 
-        <section class="notebook" id="summary">
-            <div class="tab tab-green">Summarize</div>
-            <div class="page">
-                <h2>Summarize a passage</h2>
-                <p class="hint">Paste a long paragraph or article to condense.</p>
-                <form id="summaryForm" class="row">
-                    <input type="text" id="summaryText" placeholder="Paste long content to summarize" required>
-                    <button type="submit">Summarize</button>
-                </form>
-                <div id="summaryResult" class="output" data-empty="Your summary will appear here.">Your summary will appear here.</div>
-            </div>
-        </section>
+- **Ask any question** and get a clear, accurate answer
+- **Get simplified explanations** of complex topics, written for beginners
+- **Generate custom quizzes** from any passage or topic, with instant answer checking
+- **Summarize long content** into concise, easy-to-digest text
+- **Get a personalized learning path** — structured from beginner to advanced, with curated resources
 
-        <section class="notebook" id="quiz">
-            <div class="tab tab-rose">Quiz</div>
-            <div class="page">
-                <h2>Generate a quiz</h2>
-                <p class="hint">Three multiple-choice questions from any topic or passage.</p>
-                <form id="quizForm" class="row">
-                    <input type="text" id="quizText" placeholder="Solar System" required>
-                    <button type="submit">Generate quiz</button>
-                </form>
-                <div id="quizResult" class="output" data-empty="Your quiz will appear here.">Your quiz will appear here.</div>
-            </div>
-        </section>
+The interface is designed around a "study desk" concept: each tool sits on its own notebook-style page with a labeled tab, set against a warm parchment background — built to feel calm and legible rather than like a generic dashboard. Built with a modular FastAPI backend, a lightweight vanilla JS/HTML frontend, and deployed live on Render.
 
-        <section class="notebook" id="path">
-            <div class="tab tab-blue">Plan</div>
-            <div class="page">
-                <h2>Get a learning path</h2>
-                <p class="hint">A structured, beginner-to-advanced study plan with resources.</p>
-                <form id="recommendForm" class="row">
-                    <input type="text" id="recommendTopic" placeholder="SQL" required>
-                    <button type="submit">Get plan</button>
-                </form>
-                <div id="recommendResult" class="output" data-empty="Your learning path will appear here.">Your learning path will appear here.</div>
-            </div>
-        </section>
 
-    </main>
+## Folder Structure
 
-    <footer class="colophon">
-        <p>EduGenie — built for the SmartBridge Google Cloud Gen AI Internship.</p>
-    </footer>
+```
+edugenie/
+├── static/
+│   └── style.css
+├── templates/
+│   └── index.html
+├── explanation_module.py
+├── learning_path.py
+├── main.py
+├── qna.py
+├── quiz_module.py
+├── summary_module.py
+├── requirements.txt
+├── .env.example
+└── .gitignore
+```
 
-    <script>
-        function setLoading(el) {
-            el.classList.remove("empty");
-            el.innerText = "Working on it...";
-        }
+## Setup
 
-        function setResult(el, text) {
-            el.classList.remove("empty");
-            el.innerText = text;
-        }
+1. **Clone the repo & create a virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate   # Windows: venv\Scripts\activate
+   ```
 
-        // Q&A
-        document.getElementById("qaForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const out = document.getElementById("qaResult");
-            const question = document.getElementById("question").value;
-            setLoading(out);
-            const res = await fetch(`/qa?question=${encodeURIComponent(question)}`);
-            const data = await res.json();
-            setResult(out, data.answer);
-        });
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-        // Explanation
-        document.getElementById("explainForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const out = document.getElementById("explanationResult");
-            const topic = document.getElementById("topic").value;
-            setLoading(out);
-            const res = await fetch("/explain/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ topic })
-            });
-            const data = await res.json();
-            setResult(out, data.explanation || data.error);
-        });
+3. **Configure your Gemini API key**
+   - Copy `.env.example` to `.env`
+   - Get a key from [Google AI Studio](https://ai.google.dev/gemini-api/docs/api-key)
+   - Add it to `.env`:
+     ```
+     GEMINI_API_KEY=your_actual_key
+     ```
 
-        // Summary
-        document.getElementById("summaryForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const out = document.getElementById("summaryResult");
-            const text = document.getElementById("summaryText").value;
-            setLoading(out);
-            const res = await fetch("/summarize/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text })
-            });
-            const data = await res.json();
-            setResult(out, data.summary || data.error);
-        });
+4. **Run the app**
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-        // Quiz
-        document.getElementById("quizForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const quizDiv = document.getElementById("quizResult");
-            const text = document.getElementById("quizText").value;
-            setLoading(quizDiv);
-            const res = await fetch("/quiz", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text })
-            });
-            const data = await res.json();
-            quizDiv.classList.remove("empty");
-            quizDiv.innerHTML = "";
+5. Open your browser at **http://127.0.0.1:8000**
 
-            if (data.quiz && !data.quiz.error) {
-                data.quiz.forEach((q, i) => {
-                    const qBlock = document.createElement("div");
-                    qBlock.className = "quiz-question";
-                    qBlock.innerHTML = `
-                        <p class="q-title">Question ${i + 1}<span>${q.question}</span></p>
-                        <div class="q-options">
-                            ${q.options.map((opt, j) => `
-                                <label>
-                                    <input type="radio" name="q${i}" value="${opt}">
-                                    <span>${opt}</span>
-                                </label>
-                            `).join("")}
-                        </div>
-                        <button type="button" data-index="${i}" class="checkAnswerBtn">Check answer</button>
-                        <p class="answerFeedback" id="feedback${i}"></p>
-                    `;
-                    quizDiv.appendChild(qBlock);
-                });
+## API Endpoints
 
-                document.querySelectorAll(".checkAnswerBtn").forEach(btn => {
-                    btn.addEventListener("click", () => {
-                        const i = btn.getAttribute("data-index");
-                        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-                        const feedback = document.getElementById(`feedback${i}`);
-                        if (!selected) {
-                            feedback.className = "answerFeedback neutral";
-                            feedback.innerText = "Select an option first.";
-                            return;
-                        }
-                        if (selected.value === data.quiz[i].answer) {
-                            feedback.className = "answerFeedback correct";
-                            feedback.innerText = "Correct.";
-                        } else {
-                            feedback.className = "answerFeedback incorrect";
-                            feedback.innerText = `Incorrect. Correct answer: ${data.quiz[i].answer}`;
-                        }
-                    });
-                });
-            } else {
-                setResult(quizDiv, "Could not generate a quiz. Try again.");
-            }
-        });
+| Method | Endpoint | Description |
+|--------|-----------|-------------|
+| GET | `/qa?question=...` | Ask a question, answered via Gemini |
+| POST | `/explain/` | `{ "topic": "..." }` → simplified explanation |
+| POST | `/summarize/` | `{ "text": "..." }` → summary |
+| POST | `/quiz` | `{ "text": "..." }` → 3 MCQs (JSON) |
+| GET | `/learn/recommendations?topic=...` | Personalized learning path |
 
-        // Learning Recommendations
-        document.getElementById("recommendForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const out = document.getElementById("recommendResult");
-            const topic = document.getElementById("recommendTopic").value;
-            setLoading(out);
-            const res = await fetch(`/learn/recommendations?topic=${encodeURIComponent(topic)}`);
-            const data = await res.json();
-            setResult(out, data.recommendation);
-        });
-    </script>
-</body>
-</html>
+## Tech Stack
+
+- **Backend:** FastAPI, Uvicorn
+- **AI Models:** Google Gemini (`gemini-flash-latest`, cloud), LaMini-Flan-T5-783M (local, via Hugging Face Transformers)
+- **Frontend:** HTML, CSS, Jinja2, vanilla JS (fetch API)
+- **Deployment:** Render (Web Service, free tier)
+
+## Notes
+
+- `explanation_module.py` downloads `MBZUAI/LaMini-Flan-T5-783M` from Hugging Face on first run — this may take a few minutes locally, and may not run on memory-constrained free hosting tiers (the app degrades gracefully and other features remain unaffected).
+- Gemini model names are periodically deprecated by Google; `gemini-flash-latest` is used as an alias that auto-updates to the current stable flash model to reduce maintenance.
+- Free-tier Gemini API usage is subject to daily rate limits (20 requests/day at time of writing for some models).
+- Do **not** commit your `.env` file or API key to the repository.
