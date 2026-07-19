@@ -1,6 +1,6 @@
 # EduGenie — Google Gemini Powered Learning Assistant
 
-**🔗 Live Demo:** [https://edugenie-3.onrender.com](https://edugenie-3.onrender.com)
+**Live Demo:** [https://edugenie-3.onrender.com](https://edugenie-3.onrender.com)
 *(Free-tier hosting — first request after inactivity may take 30–50s to wake up)*
 
 Project built for the **SmartBridge Google Cloud Gen AI Internship**.
@@ -22,6 +22,9 @@ The interface is designed around a "study desk" concept: each tool sits on its o
 
 ```
 edugenie/
+├── docs/
+│   ├── screenshots/
+│   └── er-diagram/
 ├── static/
 │   └── style.css
 ├── templates/
@@ -81,6 +84,20 @@ edugenie/
 - **AI Models:** Google Gemini (`gemini-flash-latest`, cloud), LaMini-Flan-T5-783M (local, via Hugging Face Transformers)
 - **Frontend:** HTML, CSS, Jinja2, vanilla JS (fetch API)
 - **Deployment:** Render (Web Service, free tier)
+
+## Screenshots
+
+### Home
+![Home](docs/screenshots/homepage.png)
+
+
+## ER Diagram
+
+![ER Diagram](docs/er-diagram/edugenie-er-diagram.jpeg)
+
+## Demo Video
+
+[Watch the demo video](docs/demo-video.mp4)
 
 ## Notes
 
