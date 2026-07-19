@@ -1,6 +1,6 @@
 # EduGenie — Google Gemini Powered Learning Assistant
 
-**Live Demo:** [https://edugenie-3.onrender.com](https://edugenie-3.onrender.com)
+**Live Demo:** [https://edugenie-ai-learning-assistant.onrender.com/](https://edugenie-ai-learning-assistant.onrender.com/)
 *(Free-tier hosting — first request after inactivity may take 30–50s to wake up)*
 
 Project built for the **SmartBridge Google Cloud Gen AI Internship**.
